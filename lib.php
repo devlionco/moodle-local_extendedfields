@@ -69,18 +69,19 @@ function local_extendedfields_coursemodule_standard_elements($formwrapper, $mfor
  */
 function local_extendedfields_coursemodule_edit_post_actions($data, $course) {
     global $DB;
-
-    $obj = $DB->get_record('local_extendedfields', array('instanceid' => $data->id));
-    if(!empty($obj)){
-        $obj->status = $data->quiz_last_semester;
-        $obj->timemodified = time();
-        $DB->update_record('local_extendedfields', $obj);
-    }else{
-        $obj = new \StdClass();
-        $obj->instanceid = $data->id;
-        $obj->status = $data->quiz_last_semester;
-        $obj->timemodified = time();
-        $DB->insert_record('local_extendedfields', $obj);
+    if ($data->modulename == 'quiz') {
+        $obj = $DB->get_record('local_extendedfields', array('instanceid' => $data->id));
+        if (!empty($obj)) {
+            $obj->status = $data->quiz_last_semester;
+            $obj->timemodified = time();
+            $DB->update_record('local_extendedfields', $obj);
+        } else {
+            $obj = new \StdClass();
+            $obj->instanceid = $data->id;
+            $obj->status = $data->quiz_last_semester;
+            $obj->timemodified = time();
+            $DB->insert_record('local_extendedfields', $obj);
+        }
     }
 
     return $data;
